@@ -18,6 +18,7 @@ export default function IncidentDetailPage() {
   const { data, loading, error } = useQuery<{ incident: IncidentDetail | null }>(GET_INCIDENT, {
     variables: { id },
     pollInterval: 5000,
+    errorPolicy: 'all',
   });
 
   const [acknowledge, acknowledgeState] = useMutation(ACKNOWLEDGE_INCIDENT, {
@@ -35,10 +36,10 @@ export default function IncidentDetailPage() {
   if (loading && !data) {
     return <p className="muted">Cargando…</p>;
   }
-  if (error) {
-    return <p className="error">No se pudo cargar: {error.message}</p>;
-  }
   if (!incident) {
+    if (error) {
+      return <p className="error">No se pudo cargar: {error.message}</p>;
+    }
     return (
       <section className="card">
         <p>No se encontró el incidente.</p>
@@ -100,6 +101,50 @@ export default function IncidentDetailPage() {
           <dt>Resuelto</dt>
           <dd>{formatDate(incident.resolvedAt)}</dd>
         </dl>
+      </section>
+
+      <section className="card">
+        <h2>Alertas asociadas</h2>
+        {incident.alerts == null && (
+          <p className="muted">No se pudieron cargar las alertas (servicio no disponible).</p>
+        )}
+        {incident.alerts != null && incident.alerts.length === 0 && (
+          <p className="muted">Sin alertas asociadas.</p>
+        )}
+        {incident.alerts != null && incident.alerts.length > 0 && (
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Título</th>
+                  <th>Severidad</th>
+                  <th>Veces</th>
+                  <th>Etiquetas</th>
+                  <th>Última vez</th>
+                </tr>
+              </thead>
+              <tbody>
+                {incident.alerts.map((alert) => (
+                  <tr key={alert.id}>
+                    <td>{alert.title}</td>
+                    <td>
+                      <SeverityBadge severity={alert.severity} />
+                    </td>
+                    <td>{alert.occurrences}</td>
+                    <td className="labels">
+                      {alert.labels.map((label) => (
+                        <span className="chip" key={`${label.key}-${label.value}`}>
+                          {label.key}={label.value}
+                        </span>
+                      ))}
+                    </td>
+                    <td>{formatDate(alert.lastReceivedAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
 
       <section className="card">

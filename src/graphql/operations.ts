@@ -40,6 +40,68 @@ export interface IncidentDetail extends IncidentSummary {
   updatedAt: string;
   resolvedAt: string | null;
   timeline: TimelineEvent[];
+  alerts: IncidentAlert[] | null;
+}
+
+export interface AlertLabel {
+  key: string;
+  value: string;
+}
+
+export interface IncidentAlert {
+  id: string;
+  source: string;
+  title: string;
+  severity: Severity;
+  occurrences: number;
+  labels: AlertLabel[];
+  firstReceivedAt: string;
+  lastReceivedAt: string;
+}
+
+export interface Team {
+  id: string;
+  name: string;
+  services: string[];
+}
+
+export interface OnCallUser {
+  userId: string;
+  name: string;
+  email: string;
+  level: number;
+}
+
+export interface EscalationLevel {
+  level: number;
+  waitMinutes: number;
+  userIds: string[];
+}
+
+export interface EscalationPolicy {
+  id: string;
+  teamId: string;
+  name: string;
+  levels: EscalationLevel[];
+}
+
+export interface ScheduleShift {
+  userId: string;
+  startsAt: string;
+  endsAt: string;
+}
+
+export interface Schedule {
+  id: string;
+  teamId: string;
+  name: string;
+  shifts: ScheduleShift[];
+}
+
+export interface OnCallOverview {
+  onCall: OnCallUser[];
+  escalationPolicies: EscalationPolicy[];
+  schedules: Schedule[];
 }
 
 export const LIST_INCIDENTS = gql`
@@ -75,6 +137,60 @@ export const GET_INCIDENT = gql`
         message
         actor
         createdAt
+      }
+      alerts {
+        id
+        source
+        title
+        severity
+        occurrences
+        labels {
+          key
+          value
+        }
+        firstReceivedAt
+        lastReceivedAt
+      }
+    }
+  }
+`;
+
+export const LIST_TEAMS = gql`
+  query Teams {
+    teams {
+      id
+      name
+      services
+    }
+  }
+`;
+
+export const ONCALL_OVERVIEW = gql`
+  query OnCallOverview($teamId: ID!) {
+    onCall(teamId: $teamId) {
+      userId
+      name
+      email
+      level
+    }
+    escalationPolicies(teamId: $teamId) {
+      id
+      teamId
+      name
+      levels {
+        level
+        waitMinutes
+        userIds
+      }
+    }
+    schedules(teamId: $teamId) {
+      id
+      teamId
+      name
+      shifts {
+        userId
+        startsAt
+        endsAt
       }
     }
   }

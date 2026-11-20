@@ -19,6 +19,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               Beacon
             </Link>
             <span className="tagline">Gestión de incidentes</span>
+            <nav className="nav" aria-label="Navegación principal">
+              <Link href="/">Incidentes</Link>
+              <Link href="/oncall">On-call</Link>
+            </nav>
           </header>
           <main className="container">{children}</main>
         </Providers>

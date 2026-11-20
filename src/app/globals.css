@@ -39,6 +39,9 @@ a:hover { text-decoration: underline; }
 }
 .brand { font-size: 1.25rem; font-weight: 700; color: var(--text); }
 .tagline { color: var(--muted); font-size: 0.9rem; }
+.nav { display: flex; gap: 14px; margin-left: auto; }
+.nav a { color: var(--muted); font-weight: 600; }
+.nav a:hover { color: var(--primary); }
 
 .container { max-width: 1000px; margin: 0 auto; padding: 24px; display: grid; gap: 16px; }
 
@@ -86,3 +89,37 @@ th { color: var(--muted); font-weight: 600; font-size: 0.85rem; }
 
 .muted { color: var(--muted); }
 .error { color: var(--danger); }
+
+.chip {
+  display: inline-block;
+  margin: 2px 4px 2px 0;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--border);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+td.labels { white-space: normal; min-width: 180px; }
+
+.oncall-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.person {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.person span:last-child { color: var(--muted); font-size: 0.85rem; }
+.level-tag {
+  justify-self: start;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--border);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+tr.current { background: color-mix(in srgb, var(--primary) 10%, var(--surface)); }
