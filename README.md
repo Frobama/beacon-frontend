@@ -15,6 +15,22 @@ Dashboard web de **Beacon**.
 - On-call: turnos y políticas de escalamiento.
 - Postmortems y aprobación de runbooks (fases 4 y 5).
 
+## Cómo ejecutar
+
+```bash
+npm install
+npm run dev
+```
+
+Necesita el backend GraphQL en `NEXT_PUBLIC_GRAPHQL_URL` (por defecto `http://localhost:3001/graphql`). Copia `.env.example` a `.env.local` para cambiarla.
+
+## Pantallas (Fase 1)
+
+- `/`: lista de incidentes con filtros, y formulario para crear uno.
+- `/incidents/[id]`: detalle, timeline y acciones (reconocer y resolver).
+
+Mientras no existan subscriptions (Fase 3), las pantallas se actualizan cada 5 segundos.
+
 ## Estado
 
-Fase 0: repositorio inicializado. La primera pantalla llega en la Fase 1.
+Fase 1: lista, detalle y acciones básicas. Pendiente: on-call, postmortems y aprobaciones.
